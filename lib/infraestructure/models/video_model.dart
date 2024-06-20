@@ -4,7 +4,7 @@ class VideoModel {
   final int? id;
   final String title;
   final String? description;
-  final Uint8List? videoData;
+  final String? videoData;
 
   VideoModel({
     this.id,
@@ -18,9 +18,15 @@ class VideoModel {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      videoData: json['video_data'] != null
-          ? Uint8List.fromList(json['video_data'].cast<int>())
-          : null,
+      videoData: json['video_data'],
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'video_path': videoData,
+    };
   }
 }
