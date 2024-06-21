@@ -12,7 +12,7 @@ class GetAllVideos implements UseCase<List<VideoEntity>, NoParams> {
   }) : _videoRepository = videoRepository;
 
   @override
-  Future<Either<Failure, List<VideoEntity>>> call(NoParams params) async {
+  Future<Either<Failure, List<VideoEntity>>> call(NoParams noParams) async {
     return await _videoRepository.getAllVideos();
   }
 }

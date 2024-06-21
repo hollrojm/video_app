@@ -15,10 +15,10 @@ class VideoRepositoryImpl implements VideoRepository {
   Future<Either<Failure, VideoEntity>> createVideo(VideoEntity video) async {
     try {
       final result = await videoDataSource.createVideo(VideoModel(
-        id: video.id!,
-        title: video.title,
+        id: video.id,
+        title: video.title!,
         description: video.description!,
-        videoData: video.videoData!,
+        videoData: video.videoData,
       ));
       return Right(result);
     } on ServerException catch (e) {
@@ -86,10 +86,10 @@ class VideoRepositoryImpl implements VideoRepository {
   Future<Either<Failure, VideoEntity>> updateVideo(VideoEntity video) async {
     try {
       final result = await videoDataSource.updateVideo(VideoModel(
-        id: video.id!,
-        title: video.title,
+        id: video.id,
+        title: video.title!,
         description: video.description!,
-        videoData: video.videoData!,
+        videoData: video.videoData,
       ));
       return Right(result);
     } on ServerException catch (e) {

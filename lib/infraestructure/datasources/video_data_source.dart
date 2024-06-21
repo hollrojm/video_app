@@ -23,7 +23,7 @@ class VideoDataSourceImpl implements VideoDataSource {
           data: FormData.fromMap({
             'title': video.title,
             'description': video.description,
-            'video': await MultipartFile.fromFile(video.videoData!),
+            'video': await MultipartFile.fromFile(video.videoData),
           }));
       return VideoModel.fromJson(response.data);
     } catch (e) {
