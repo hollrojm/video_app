@@ -1,12 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:equatable/equatable.dart';
 
 class VideoEntity extends Equatable {
   final int? id;
   final String title;
   final String? description;
-  final Uint8List? videoData;
+  final String? videoData;
 
   const VideoEntity({
     required this.id,

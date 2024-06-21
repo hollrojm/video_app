@@ -1,17 +1,16 @@
-import 'dart:typed_data';
+import 'package:video_app/domain/entities/video_entity.dart';
 
-class VideoModel {
-  final int? id;
-  final String title;
-  final String? description;
-  final String? videoData;
-
+class VideoModel extends VideoEntity {
   VideoModel({
-    this.id,
-    required this.title,
-    this.description,
-    this.videoData,
-  });
+    required int id,
+    required String title,
+    required String description,
+    required String videoData,
+  }) : super(
+            id: id,
+            title: title,
+            description: description,
+            videoData: videoData);
 
   factory VideoModel.fromJson(Map<String, dynamic> json) {
     return VideoModel(
