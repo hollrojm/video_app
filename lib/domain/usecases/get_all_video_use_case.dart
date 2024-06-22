@@ -4,10 +4,10 @@ import 'package:video_app/core/use_case.dart';
 import 'package:video_app/domain/entities/video_entity.dart';
 import 'package:video_app/domain/repositories/video_repository.dart';
 
-class GetAllVideos implements UseCase<List<VideoEntity>, NoParams> {
+class GetAllVideosUseCase implements UseCase<List<VideoEntity>, NoParams> {
   final VideoRepository _videoRepository;
 
-  GetAllVideos({
+  GetAllVideosUseCase({
     required VideoRepository videoRepository,
   }) : _videoRepository = videoRepository;
 

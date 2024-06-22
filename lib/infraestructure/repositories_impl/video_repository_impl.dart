@@ -71,18 +71,6 @@ class VideoRepositoryImpl implements VideoRepository {
   }
 
   @override
-  Future<Either<Failure, List<VideoEntity>>> searchVideos(String query) async {
-    try {
-      final result = await videoDataSource.searchVideos(query);
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(e.message));
-    }
-  }
-
-  @override
   Future<Either<Failure, VideoEntity>> updateVideo(VideoEntity video) async {
     try {
       final result = await videoDataSource.updateVideo(VideoModel(

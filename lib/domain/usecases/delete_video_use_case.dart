@@ -4,7 +4,7 @@ import 'package:video_app/core/failures.dart';
 import 'package:video_app/core/use_case.dart';
 import 'package:video_app/domain/repositories/video_repository.dart';
 
-class DeleteVideoUseCase implements UseCase<void, Params> {
+class DeleteVideoUseCase implements UseCase<void, DeleteVideoParams> {
   final VideoRepository videoRepository;
 
   DeleteVideoUseCase({required this.videoRepository});
@@ -14,10 +14,10 @@ class DeleteVideoUseCase implements UseCase<void, Params> {
   }
 }
 
-class Params extends Equatable {
+class DeleteVideoParams extends Equatable {
   final int id;
 
-  const Params({required this.id});
+  const DeleteVideoParams({required this.id});
 
   @override
   List<Object> get props => [id];

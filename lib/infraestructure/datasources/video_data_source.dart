@@ -8,12 +8,11 @@ abstract class VideoDataSource {
   Future<VideoModel> createVideo(VideoModel video);
   Future<VideoModel> updateVideo(VideoModel video);
   Future<void> deleteVideo(int id);
-  Future<List<VideoModel>> searchVideos(String query);
 }
 
 class VideoDataSourceImpl implements VideoDataSource {
   final Dio dio;
-  final String baseUrl = 'http://localhost:8000/api/videos';
+  final String baseUrl = "http://10.0.2.2:8000/api/videos";
 
   VideoDataSourceImpl({required this.dio});
   @override
@@ -70,19 +69,6 @@ class VideoDataSourceImpl implements VideoDataSource {
         data: video.toJson(),
       );
       return VideoModel.fromJson(response.data);
-    } catch (e) {
-      throw _handleDioError(e);
-    }
-  }
-
-  @override
-  Future<List<VideoModel>> searchVideos(String query) async {
-    try {
-      final response =
-          await dio.get('$baseUrl/search', queryParameters: {'q': query});
-      return (response.data as List)
-          .map((json) => VideoModel.fromJson(json))
-          .toList();
     } catch (e) {
       throw _handleDioError(e);
     }

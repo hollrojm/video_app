@@ -1,1 +1,1 @@
-export 'package:video_app/presentation/ui/screens/home_screen.dart';
+export 'package:video_app/presentation/ui/screens/home/home_screen.dart';

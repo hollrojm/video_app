@@ -5,7 +5,7 @@ import 'package:video_app/core/use_case.dart';
 import 'package:video_app/domain/entities/video_entity.dart';
 import 'package:video_app/domain/repositories/video_repository.dart';
 
-class GetVideoUseCase implements UseCase<VideoEntity, Params> {
+class GetVideoUseCase implements UseCase<VideoEntity, GetVideoParams> {
   final VideoRepository videoRepository;
 
   GetVideoUseCase({required this.videoRepository});
@@ -15,10 +15,10 @@ class GetVideoUseCase implements UseCase<VideoEntity, Params> {
   }
 }
 
-class Params extends Equatable {
+class GetVideoParams extends Equatable {
   final int id;
 
-  const Params({required this.id});
+  const GetVideoParams({required this.id});
 
   @override
   List<Object> get props => [id];

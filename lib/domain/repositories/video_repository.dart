@@ -8,5 +8,4 @@ abstract class VideoRepository {
   Future<Either<Failure, VideoEntity>> createVideo(VideoEntity video);
   Future<Either<Failure, VideoEntity>> updateVideo(VideoEntity video);
   Future<Either<Failure, void>> deleteVideo(int id);
-  Future<Either<Failure, List<VideoEntity>>> searchVideos(String query);
 }
