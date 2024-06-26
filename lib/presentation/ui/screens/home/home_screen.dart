@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_app/domain/entities/video_entity.dart';
@@ -76,9 +78,11 @@ void _showAddVideoDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) => VideoFormDialog(
-      onSubmit: (video) {
-        context.read<VideoCubit>().addVideo(video);
-        Navigator.of(context).pop();
+      onSubmit: (video, File? videoFile) {
+        if (videoFile != null) {
+          context.read<VideoCubit>().addVideo(video, videoFile);
+          Navigator.of(context).pop();
+        }
       },
     ),
   );
@@ -89,8 +93,8 @@ void _showEditVideoDialog(BuildContext context, VideoEntity video) {
     context: context,
     builder: (context) => VideoFormDialog(
       videoEntity: video,
-      onSubmit: (updatedVideo) {
-        context.read<VideoCubit>().editVideo(updatedVideo);
+      onSubmit: (updatedVideo, File? videoFile) {
+        context.read<VideoCubit>().editVideo(updatedVideo, videoFile);
         Navigator.of(context).pop();
       },
     ),

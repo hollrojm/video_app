@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:video_app/core/exceptions.dart';
 import 'package:video_app/infraestructure/models/video_model.dart';
@@ -5,8 +7,8 @@ import 'package:video_app/infraestructure/models/video_model.dart';
 abstract class VideoDataSource {
   Future<List<VideoModel>> getAllVideos();
   Future<VideoModel> getVideo(int id);
-  Future<VideoModel> createVideo(VideoModel video);
-  Future<VideoModel> updateVideo(VideoModel video);
+  Future<VideoModel> createVideo(VideoModel video, File videoFile);
+  Future<VideoModel> updateVideo(VideoModel video, File videoFile);
   Future<void> deleteVideo(int id);
 }
 
@@ -16,13 +18,13 @@ class VideoDataSourceImpl implements VideoDataSource {
 
   VideoDataSourceImpl({required this.dio});
   @override
-  Future<VideoModel> createVideo(VideoModel video) async {
+  Future<VideoModel> createVideo(VideoModel video, File videoFile) async {
     try {
       final response = await dio.post(baseUrl,
           data: FormData.fromMap({
             'title': video.title,
             'description': video.description,
-            'video': await MultipartFile.fromFile(video.videoData),
+            'video': await MultipartFile.fromFile(videoFile.path),
           }));
       return VideoModel.fromJson(response.data);
     } catch (e) {
@@ -62,12 +64,18 @@ class VideoDataSourceImpl implements VideoDataSource {
   }
 
   @override
-  Future<VideoModel> updateVideo(VideoModel video) async {
+  Future<VideoModel> updateVideo(VideoModel video, File videoFile) async {
     try {
-      final response = await dio.put(
-        '$baseUrl/${video.id}',
-        data: video.toJson(),
-      );
+      final Map<String, dynamic> data = {
+        'title': video.title,
+        'description': video.description,
+      };
+
+      data['video'] = await MultipartFile.fromFile(videoFile.path);
+
+      final formData = FormData.fromMap(data);
+
+      final response = await dio.put('$baseUrl/${video.id}', data: formData);
       return VideoModel.fromJson(response.data);
     } catch (e) {
       throw _handleDioError(e);

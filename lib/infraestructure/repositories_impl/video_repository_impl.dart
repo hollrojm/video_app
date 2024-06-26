@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:video_app/core/exceptions.dart';
 import 'package:video_app/core/failures.dart';
@@ -12,14 +14,11 @@ class VideoRepositoryImpl implements VideoRepository {
   VideoRepositoryImpl({required this.videoDataSource});
 
   @override
-  Future<Either<Failure, VideoEntity>> createVideo(VideoEntity video) async {
+  Future<Either<Failure, VideoEntity>> createVideo(
+      VideoEntity video, File videoFile) async {
     try {
-      final result = await videoDataSource.createVideo(VideoModel(
-        id: video.id,
-        title: video.title!,
-        description: video.description!,
-        videoData: video.videoData,
-      ));
+      final result = await videoDataSource.createVideo(
+          VideoModel.fromEntity(video), videoFile);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -71,14 +70,11 @@ class VideoRepositoryImpl implements VideoRepository {
   }
 
   @override
-  Future<Either<Failure, VideoEntity>> updateVideo(VideoEntity video) async {
+  Future<Either<Failure, VideoEntity>> updateVideo(
+      VideoEntity video, File? videoFile) async {
     try {
-      final result = await videoDataSource.updateVideo(VideoModel(
-        id: video.id,
-        title: video.title!,
-        description: video.description!,
-        videoData: video.videoData,
-      ));
+      final result = await videoDataSource.updateVideo(
+          VideoModel.fromEntity(video), videoFile!);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));

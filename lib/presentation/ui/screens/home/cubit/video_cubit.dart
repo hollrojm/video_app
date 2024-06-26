@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_app/core/use_case.dart';
 import 'package:video_app/domain/entities/video_entity.dart';
@@ -33,9 +35,9 @@ class VideoCubit extends Cubit<VideoState> {
     );
   }
 
-  Future<void> addVideo(VideoEntity video) async {
+  Future<void> addVideo(VideoEntity video, File videoFile) async {
     emit(state.copyWith(status: VideoStatus.loading));
-    final result = await createVideo(video);
+    final result = await createVideo(CreateVideoParams(video, videoFile));
     result.fold(
       (failure) => emit(state.copyWith(
         status: VideoStatus.error,
@@ -48,9 +50,9 @@ class VideoCubit extends Cubit<VideoState> {
     );
   }
 
-  Future<void> editVideo(VideoEntity video) async {
+  Future<void> editVideo(VideoEntity video, File? videoFile) async {
     emit(state.copyWith(status: VideoStatus.loading));
-    final result = await updateVideo(video);
+    final result = await updateVideo(UpdateVideoParams(video, videoFile!));
     result.fold(
       (failure) => emit(state.copyWith(
         status: VideoStatus.error,

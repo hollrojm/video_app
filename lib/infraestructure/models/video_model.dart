@@ -24,4 +24,13 @@ class VideoModel extends VideoEntity {
       'video_path': videoData,
     };
   }
+
+  factory VideoModel.fromEntity(VideoEntity entity) {
+    return VideoModel(
+      id: entity.id,
+      title: entity.title,
+      description: entity.description,
+      videoData: entity.videoData,
+    );
+  }
 }

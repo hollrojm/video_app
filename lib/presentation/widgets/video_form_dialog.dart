@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:video_app/domain/entities/video_entity.dart';
 
@@ -5,7 +8,7 @@ class VideoFormDialog extends StatefulWidget {
   const VideoFormDialog({super.key, this.videoEntity, required this.onSubmit});
 
   final VideoEntity? videoEntity;
-  final Function(VideoEntity) onSubmit;
+  final Function(VideoEntity, File) onSubmit;
 
   @override
   State<VideoFormDialog> createState() => _VideoFormDialogState();
@@ -14,13 +17,32 @@ class VideoFormDialog extends StatefulWidget {
 class _VideoFormDialogState extends State<VideoFormDialog> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
-
+  File? _videoFile;
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.videoEntity!.title);
     _descriptionController =
         TextEditingController(text: widget.videoEntity!.description);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickVideo() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.video,
+    );
+
+    if (result != null) {
+      setState(() {
+        _videoFile = File(result.files.single.path!);
+      });
+    }
   }
 
   @override
@@ -37,7 +59,15 @@ class _VideoFormDialogState extends State<VideoFormDialog> {
           TextField(
             controller: _descriptionController,
             decoration: const InputDecoration(labelText: 'Descripción'),
-          )
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: _pickVideo,
+            child: Text(
+                _videoFile != null ? 'Cambiar Video' : 'Seleccionar Video'),
+          ),
+          if (_videoFile != null)
+            Text('Archivo seleccionado: ${_videoFile!.path.split('/').last}'),
         ],
       ),
       actions: [
@@ -53,7 +83,7 @@ class _VideoFormDialogState extends State<VideoFormDialog> {
               description: _descriptionController.text,
               videoData: widget.videoEntity?.videoData ?? '',
             );
-            widget.onSubmit(video);
+            widget.onSubmit(video, _videoFile!);
           },
           child: const Text('Guardar'),
         )
