@@ -14,7 +14,7 @@ abstract class VideoDataSource {
 
 class VideoDataSourceImpl implements VideoDataSource {
   final Dio dio;
-  final String baseUrl = "http://10.0.2.2:8000/api/videos";
+  final String baseUrl = "http://192.168.101.7:8000/api/videos";
 
   VideoDataSourceImpl({required this.dio});
   @override
@@ -82,18 +82,25 @@ class VideoDataSourceImpl implements VideoDataSource {
     }
   }
 
-  Exception _handleDioError(e) {
-    if (e.type == e.connectTimeout ||
-        e.type == e.receiveTimeout ||
-        e.type == e.sendTimeout) {
-      return NetworkException('Network error: ${e.message}', message: '');
-    } else if (e.response?.statusCode == 404) {
-      return NotFoundException('Resource not found');
-    } else if (e.response?.statusCode == 400) {
-      return ValidationException(
-          'Validation error: ${e.response?.data['message']}');
-    } else {
-      return ServerException('Server error: ${e.message}', message: '');
+  Exception _handleDioError(dynamic e) {
+    if (e is DioException) {
+      switch (e.type) {
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.sendTimeout:
+        case DioExceptionType.receiveTimeout:
+          return NetworkException('Network error: ${e.message}', message: '');
+        case DioExceptionType.badResponse:
+          if (e.response?.statusCode == 404) {
+            return NotFoundException('Resource not found');
+          } else if (e.response?.statusCode == 400) {
+            return ValidationException(
+                'Validation error: ${e.response?.data['message']}');
+          }
+          break;
+        default:
+          break;
+      }
     }
+    return ServerException('Server error: ${e.toString()}', message: '');
   }
 }

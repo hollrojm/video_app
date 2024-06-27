@@ -4,13 +4,13 @@ class VideoEntity extends Equatable {
   final int id;
   final String? title;
   final String? description;
-  final String videoData;
+  final String? videoData;
 
   const VideoEntity({
     required this.id,
-    required this.title,
-    required this.description,
-    required this.videoData,
+    this.title,
+    this.description,
+    this.videoData,
   });
 
   @override
